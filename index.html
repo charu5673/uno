@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./assets/images/uno_logo.png">
+    <script src="src/script.js" defer></script>
+    <link rel="stylesheet" href="src/style.css">
+    <title>UNO!</title>
+</head>
+<body>
+    <div class="top">
+        <img src="./assets/images/uno_logo.png">
+        <div class="top_left">
+            <a>Home</a>
+            <a>Rules</a>
+            <a>About</a>
+        </div>
+    </div>
+    <main>
+        <div class="side">
+            <button class="start_reset">Start</button>
+            <button class="arrange">Arrange</button>
+            <button class="say_uno">UNO!</button>
+            <div class="button4_side">
+                <label>Players:</label>
+                <input type="number" class="player_count" name="player_count" value=2 min="2" max="4"></input>
+            </div>
+            <div class="deck">
+                <img src="./assets/images/uno_back.png">
+            </div>
+        </div>
+        <div class="game">
+            <div class="game_row1">
+                <div class="played_cards">
+                    <div class="color_buttons_info">
+                        <button class="red_choice" hidden></button>
+                        <button class="yellow_choice current_color"></button>
+                        <button class="green_choice current_symbol"></button>
+                        <button class="blue_choice" hidden></button>
+                    </div>
+                    <img class="current_card">
+                </div>
+                <div class="computer_players">
+                    <div class="cplayer2">
+                        <div class="cplayer1_cards"></div>
+                        <div class="cplayer1_text"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="game_row2">
+                <button class="move_left"></button>
+                <div class="user_cards"></div>
+                <button class="move_right"></button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

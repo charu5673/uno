@@ -1,0 +1,119 @@
+@font-face {
+    font-family: fulbo-argenta;
+    src: url(../assets/fonts/fulbo-argenta.otf);
+}
+
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body
+{
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr 10fr;
+}
+
+.top
+{
+    display: flex;
+    justify-content: space-between;
+    background-color: #005C78;
+    align-items: center;
+}
+
+.top img
+{
+    margin-right: 40px;
+    filter: drop-shadow(0 0 10px #000000c9);
+    aspect-ratio: 1/1;
+    height: 6em;
+}
+
+.top_left
+{
+    font-size: 3em;
+    font-family: fulbo-argenta;
+    color: #F3F7EC;
+}
+
+.top_left a
+{
+    cursor: pointer;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.top_left a.cPage
+{
+    cursor: pointer;
+    background-color: #F3F7EC;
+    color: #005C78;
+}
+
+main
+{
+    background-color: #F3F7EC;
+    display: grid;
+    grid-template-columns: 1fr 10fr;
+    width: 100vw;
+}
+
+.side
+{
+    padding: 30px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 12vw;
+    gap: 30px;
+}
+
+.side button, .button4_side
+{
+    cursor: pointer;
+    padding: 10px;
+    color: #F3F7EC;
+    font-size: 2em;
+    font-family: fulbo-argenta;
+    background-color: #E88D67;
+    border-radius: 22px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button4_side label
+{
+    cursor: pointer;
+}
+
+input[type=number]
+{
+    cursor: pointer;
+    width: 1em;
+    color: #F3F7EC;
+    font-size: 1em;
+    font-family: fulbo-argenta;
+    border: none;
+    background-color: #E88D67;
+}
+
+.side img:last-child
+{
+    cursor: pointer;
+    justify-self: center;
+    width: 9vw;
+    height: 12vw;
+}
+
+.game
+{
+    margin: 30px;
+    background-color: #F2CFC1;
+    border-radius: 50px;
+}

@@ -1,6 +1,9 @@
 // global variables
 
-
+var cPage="home";
+var homeButton=document.querySelector(".homeB");
+var rulesButton=document.querySelector(".rulesB");
+var aboutButton=document.querySelector(".aboutB");
 var numberOfPlayers=2,gameOngoing=false;
 var userCards=[];
 var playerCount=document.querySelector(".player_count");
@@ -13,6 +16,7 @@ var deck=[];
 var deckCount=0;
 var colors=["red","yellow","green","blue"];
 var sequence=true;
+var players=[];
 
 
 //
@@ -21,6 +25,24 @@ var sequence=true;
 
 
 // event handlers
+
+
+// event handlers for page buttons
+homeButton.addEventListener("click",function(){
+    homeButton.classList.add("cPage");
+    rulesButton.classList.remove("cPage");
+    aboutButton.classList.remove("cPage");
+});
+rulesButton.addEventListener("click",function(){
+    rulesButton.classList.add("cPage");
+    homeButton.classList.remove("cPage");
+    aboutButton.classList.remove("cPage");
+});
+aboutButton.addEventListener("click",function(){
+    aboutButton.classList.add("cPage");
+    rulesButton.classList.remove("cPage");
+    homeButton.classList.remove("cPage");
+});
 
 
 
@@ -91,6 +113,7 @@ function createDeck()                       // iife function to create deck
         deck.push(c);
     }
 
+    shuffleDeck();
 
 }
 createDeck();
@@ -102,6 +125,14 @@ createDeck();
 
 
 // object functions
+
+
+// function to create player objects
+function player(index)
+{
+    let cards=[];
+    return{index:index,cards:cards,noOfCards:0};
+}
 
 
 // function to create card objects
@@ -167,6 +198,20 @@ function card(symbol,color,property)
 // functions
 
 
+// function to shuffle deck
+function shuffleDeck()              // fisher-yates shuffling algorithm
+{
+    let currentIndex = deck.length;
+
+    while (currentIndex != 0)
+    {
+        let randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [deck[currentIndex], deck[randomIndex]] = [deck[randomIndex], deck[currentIndex]];
+    }
+}
+
+
 // function to select the choice of computer player
 function computerChoice(cards,currentCard)
 {
@@ -181,7 +226,22 @@ function computerChoice(cards,currentCard)
 // function to distribute cards initially
 function distributeCards()
 {
+    var i,j;
 
+    // distribute to user
+    for(i=0;i<7;i++)
+    {
+        userCards.push(deck.pop());
+    }
+
+    // distribute to players
+    for(i=0;i<numberOfPlayers-1;i++)
+    {
+        for(j=0;j<7;j++)
+        {
+            players[i].cards.push(deck.pop());
+        }
+    }
 }
 
 
@@ -193,7 +253,11 @@ function initialize()
     startReset.textContent="Reset";
     numberOfPlayers=playerCount.value;
     for(var i=0;i<numberOfPlayers;i++)
+    {
         playerCardsCount.push(7);
+        players.push(player(i+1));
+        players[i].noOfCards=7;
+    }
     distributeCards();
 }
 
@@ -215,14 +279,16 @@ function initialize()
 
 
 
-/* tmp experiment 
-
+/* tmp experiment  
+function display()
+{
 var display=document.querySelector(".tmp_display_cards");
+display.innerHTML="";
 for(var i=0;i<deck.length;i++)
     {
         var img=document.createElement("img");
         img.src="./assets/cards/"+deck[i].folder+deck[i].img;
         display.appendChild(img);
     }
-
-    */
+}
+   */

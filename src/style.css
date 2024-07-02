@@ -111,9 +111,74 @@ input[type=number]
     height: 12vw;
 }
 
-.game
+.gameArea
 {
+    display: flex;
     margin: 30px;
+    margin-left: 0;
     background-color: #F2CFC1;
     border-radius: 50px;
 }
+
+.game
+{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.game_row2
+{
+    justify-items: center;
+    align-items: center;
+    display: grid;
+    padding: 10px;
+    grid-template-columns: 1fr 10fr 1fr;
+    gap: 20px;
+}
+
+.game_row2 button
+{
+    cursor: pointer;
+    height: 100px;
+    width: 70px;
+    background-color: #E88D67;
+    border: none;
+    border-radius: 15px;
+}
+
+.user_cards
+{
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #005C78;
+    height: 16em;
+    align-self: stretch;
+    justify-self: stretch;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-rows: 15em;
+}
+
+.game_row2 svg
+{
+    cursor: pointer;
+    fill: black;
+    height: 60px;
+    width: 60px;
+    transform: rotate(-90deg);
+}
+
+.user_cards img
+{
+    cursor: pointer;
+    align-self: flex-end;
+    height: 12em;
+    width: 9em;
+}
+
+.user_cards img.selectedCard
+{
+    align-self: flex-start;
+}
+

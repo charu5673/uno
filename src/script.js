@@ -1,6 +1,7 @@
 // global variables
 
 var cPage="home";
+var currentCard=null;
 var homeButton=document.querySelector(".homeB");
 var rulesButton=document.querySelector(".rulesB");
 var aboutButton=document.querySelector(".aboutB");
@@ -43,6 +44,29 @@ aboutButton.addEventListener("click",function(){
     rulesButton.classList.remove("cPage");
     homeButton.classList.remove("cPage");
 });
+
+// event handler for user cards
+function addEventHandler(userCardButton)
+{
+    userCardButton.addEventListener("click",function(){
+        var flag=true;
+        if(userCardButton.classList.contains("selectedCard"))
+            flag=false;
+        var eventCards=document.querySelectorAll(".userCard");
+        for(var i=0;i<eventCards.length&&flag;i++)
+            {
+                eventCards[i].classList.remove("selectedCard");
+            }
+        for(var i=0;i<eventCards.length&&(!flag);i++)
+            {
+                eventCards[i].classList.remove("selectedCard");
+            }
+        if(flag)
+        userCardButton.classList.add("selectedCard");
+        else
+        userCardButton.classList.remove("selectedCard");
+    });
+}
 
 
 
@@ -233,6 +257,7 @@ function distributeCards()
     {
         userCards.push(deck.pop());
     }
+    displayUserCards();
 
     // distribute to players
     for(i=0;i<numberOfPlayers-1;i++)
@@ -261,34 +286,66 @@ function initialize()
     distributeCards();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* tmp experiment  
-function display()
+// function to display user cards
+window.onresize=displayUserCards;
+function displayUserCards()
 {
-var display=document.querySelector(".tmp_display_cards");
+var display=document.querySelector(".user_cards");
 display.innerHTML="";
-for(var i=0;i<deck.length;i++)
+display.style.gridTemplateColumns="";
+var c=userCards.length;
+var k=window.getComputedStyle(display).fontSize;
+k=k.substring(0,k.length-2);
+k=parseInt(k);
+var w=display.offsetWidth;
+w=w-(9*k);
+var disp="";
+for(var i=0;i<c-1;i++)
     {
-        var img=document.createElement("img");
-        img.src="./assets/cards/"+deck[i].folder+deck[i].img;
-        display.appendChild(img);
+        disp+=w/(c-1)+"px ";
+    }
+disp+="9em";
+display.style.gridTemplateColumns=disp;
+for(var i=0;i<userCards.length;i++)
+    {
+        let newCard=new Image();
+        newCard.src="./assets/cards/"+userCards[i].folder+userCards[i].img;
+        newCard.classList.add("userCard");
+        addEventHandler(newCard);
+        display.appendChild(newCard);
     }
 }
-   */
+displayUserCards();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* tmp experiment 
+
+function randomAdd()
+{
+    var button=document.querySelector(".play_card");
+    button.addEventListener("click",function(e){
+        userCards.push(deck.pop());
+        displayUserCards();
+    })
+}
+randomAdd();
+ */
+
+   

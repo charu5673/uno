@@ -26,26 +26,26 @@
                 <label>Players:&nbsp</label>
                 <input type="number" class="player_count" name="player_count" value=2 min="2" max="4"></input>
             </div>
-            <img src="./assets/images/uno_back.png">
+            <img class="deck" draggable="true" src="./assets/images/uno_back.png">
         </div>
         <div class="gameArea">
             <div class="game">
                 <div class="game_row1">
                     <div class="color_buttons">
-                        <button class="red_choice"></button>
-                        <button class="yellow_choice"></button>
-                        <button class="blue_choice"></button>
-                        <button class="green_choice"></button>
+                        <button class="red_choice colorChoice"></button>
+                        <button class="yellow_choice colorChoice"></button>
+                        <button class="blue_choice colorChoice"></button>
+                        <button class="green_choice colorChoice"></button>
                     </div>
                     <div class="current_status">
                         <img src="./assets/images/display/display_empty.png" class="current_symbol">
                         <img src="./assets/images/display/display_empty.png" class="current_color">
                     </div>
-                    <img class="current_card" ondragover="allowDrop(event)" ondrop="onDropCurrentCard(event)" src="./assets/images/play_a_card.png">
+                    <img class="current_card" ondragover="allowDropCurrentCard(event)" ondrop="onDropCurrentCard(event)" src="./assets/images/play_a_card.png">
                 </div>
                 <div class="game_row2">
                     <button class="play_card"><svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="si-glyph si-glyph-triangle-right" fill="#000000" transform="matrix(-1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>1234</title> <defs> </defs> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <path d="M6.113,15.495 C5.531,16.076 4.01,16.395 4.01,14.494 L4.01,1.506 C4.01,-0.333 5.531,-0.076 6.113,0.506 L12.557,6.948 C13.137,7.529 13.137,8.47 12.557,9.052 L6.113,15.495 L6.113,15.495 Z" fill="#000000" class="si-glyph-fill"> </path> </g> </g></svg></button>
-                    <div class="user_cards"></div>
+                    <div class="user_cards" ondragover="allowDropUserCards(event)" ondrop="addCardFromDeck('user')"></div>
                 </div>
             </div>
             <div class="computer_players">

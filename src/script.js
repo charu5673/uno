@@ -16,6 +16,13 @@ var currentCardDisplay=document.querySelector(".current_card");
 var playCardButton=document.querySelector(".play_card");
 var infoColor=document.querySelector(".current_color");
 var infoSymbol=document.querySelector(".current_symbol");
+var deckDisplay=document.querySelector(".deck");
+var userColors=[];
+var userSymbols=[];
+var hasPicked=false;
+var lastDragged=null;
+var colorPickFlag=false;
+var colorChoiceButtons=document.querySelectorAll(".colorChoice");
 
 
 //
@@ -26,9 +33,30 @@ var infoSymbol=document.querySelector(".current_symbol");
 // event handlers
 
 
-// allowing drop events
-function allowDrop(e)
+// event handler to know the last dragged element
+document.addEventListener("dragstart",function(event){
+    lastDragged=event.target;
+});
+
+
+// event handler for deck
+deckDisplay.addEventListener("click",function(e){
+    addCardFromDeck("user");
+});
+
+
+// allowing drop events from only user cards
+function allowDropCurrentCard(e)
 {
+    if(lastDragged.classList.contains("userCard"))
+    e.preventDefault();
+}
+
+
+// allowing drop events from only deck
+function allowDropUserCards(e)
+{
+    if(lastDragged.classList.contains("deck"))
     e.preventDefault();
 }
 
@@ -118,7 +146,7 @@ function addDragDropCards(e)
 function onDropCurrentCard(e)
 {
     e.preventDefault();
-    if(gameStatus.currentDragged_Picked!=null&&gameStatus.currentDragged_Picked!=undefined)
+    if(gameStatus.currentDragged_Picked!=null&&gameStatus.currentDragged_Picked!=undefined&&playIsValid(gameStatus.currentDragged_Picked))
     {
         currentCardDisplay.src="./assets/cards/"+gameStatus.currentDragged_Picked.folder+gameStatus.currentDragged_Picked.img;
         userCardsRemove(gameStatus.currentDragged_Picked);
@@ -127,6 +155,7 @@ function onDropCurrentCard(e)
         gameStatus.currentColor=gameStatus.currentDragged_Picked.color;
         gameStatus.currentSymbol=gameStatus.currentDragged_Picked.symbol;
         updateInfoDisplays();
+        carryOutProperty(gameStatus.currentDragged_Picked);
         gameStatus.currentDragged_Picked=null;
     }
 }
@@ -152,6 +181,38 @@ playCardButton.addEventListener("click",function(){
 });
 
 
+// event handler for color choice buttons
+for(i=0;i<4;i++)
+{
+    colorChoiceButtons[i].addEventListener("click",function(event){
+        if(colorPickFlag&&gameStatus.gameOngoing)
+        {
+            if(event.target.classList.contains("red_choice"))
+            {
+                gameStatus.currentColor="red";
+                infoColor.src="./assets/images/display/display_color_red.png";
+            }
+            else if(event.target.classList.contains("yellow_choice"))
+            {
+                gameStatus.currentColor="yellow";
+                infoColor.src="./assets/images/display/display_color_yellow.png";
+            }
+            else if(event.target.classList.contains("green_choice"))
+            {
+                gameStatus.currentColor="green";
+                infoColor.src="./assets/images/display/display_color_green.png";
+            }
+            else if(event.target.classList.contains("blue_choice"))
+            {
+                gameStatus.currentColor="blue";
+                infoColor.src="./assets/images/display/display_color_blue.png";
+            }
+            colorPickFlag=false;
+        }
+    });
+}
+
+
 //
 //
 //
@@ -161,7 +222,7 @@ playCardButton.addEventListener("click",function(){
 
 
 // creating deck
-function createDeck()                       // iife function to create deck
+function createDeck()
 {
     // number cards
     for(var i=0;i<=9;i++)
@@ -243,7 +304,7 @@ function resetGameStatus()
     playerCardsCount:[7,7,7,7],
     sequence:true,
     players:[],
-    turn:"player1",
+    turn:"user",
     currentDragged_Picked:null,
     playedPile:[],
     currentSymbol:null,
@@ -256,7 +317,9 @@ function resetGameStatus()
 function player(index)
 {
     let cards=[];
-    return{index:index,cards:cards,noOfCards:0};
+    let pileColors=[];
+    let pileSymbols=[];
+    return{index:index,cards:cards,noOfCards:0,pileColors:pileColors,pileSymbols:pileSymbols};
 }
 
 
@@ -542,7 +605,8 @@ function distributeCards()
         userCards[i].player="user";
         userCards[i].played=false;
         userCards[i].deck=false;
-
+        userColors.push(userCards[i].color);
+        userSymbols.push(userCards[i].symbol);
         deckCount--;
     }
     displayUserCards();
@@ -553,9 +617,11 @@ function distributeCards()
         for(j=0;j<7;j++)
         {
             gameStatus.players[i].cards.push(deck.pop());
-            userCards[i].player="player"+(i+1);
-            userCards[i].played=false;
-            userCards[i].deck=false;
+            gameStatus.players[i].cards[j].player="player"+(i+1);
+            gameStatus.players[i].cards[j].played=false;
+            gameStatus.players[i].cards[j].deck=false;
+            gameStatus.players[i].pileColors.push(gameStatus.players[i].cards[j].color);
+            gameStatus.players[i].pileSymbols.push(gameStatus.players[i].cards[j].symbol);
             deckCount--;
         }
     }
@@ -567,6 +633,7 @@ function distributeCards()
 function initialize()
 {
     deckCount=108;
+    gameStatus.turn="user";
     gameStatus.gameOngoing=true;
     startReset.textContent="Reset";
     gameStatus.numberOfPlayers=playerCount.value;
@@ -644,6 +711,9 @@ function setCplayerCards(i)
 // function to reset
 function reset()
 {
+    hasPicked=false;
+    userColors=[];
+    userSymbols=[];
     infoColor.src="./assets/images/display/display_empty.png";
     infoSymbol.src="./assets/images/display/display_empty.png";
     gameStatus=resetGameStatus();
@@ -697,6 +767,12 @@ function userCardsRemove(card)
             userCards[i].played=true;
             userCards[i].player=null;
             gameStatus.playedPile.push(userCards[i]);
+            var index=userColors.indexOf(userCards[i].color);
+            if(index>-1)
+            userColors.splice(index,1);
+            index=userSymbols.indexOf(userCards[i].symbol);
+            if(index>-1)
+            userSymbols.splice(index,1);
             userCards.splice(i,1);
             break;
         }
@@ -728,7 +804,122 @@ function updateInfoDisplays()
 }
 
 
+// function to add card to user or player cards from deck
+function addCardFromDeck(player)
+{
+    if(player=="user"&&(!hasPicked))
+    {
+        if(deck.length!=0)
+        {
+            userCards.push(deck.pop());
+            userCards[userCards.length-1].deck=true;
+            userCards[userCards.length-1].player="user";
+            userColors.push(userCards[userCards.length-1].color);
+            userSymbols.push(userCards[userCards.length-1].symbol);
+            deckCount--;
+        }
+        else
+        {
+            deck=gameStatus.playedPile;
+            shuffleDeck();
+            userCards.push(deck.pop());
+            userCards[userCards.length-1].deck=true;
+            userCards[userCards.length-1].player="user";
+            userColors.push(userCards[userCards.length-1].color);
+            userSymbols.push(userCards[userCards.length-1].symbol);
+            deckCount=deck.length;
+        }
+        hasPicked=true;
+        displayUserCards();
+    }
+    else if(player.substring(0,6)=="player")
+    {
+        var index=player.substring(6);
+        if(deck.length!=0)
+        {
+            var card=deck.pop();
+            card.deck=false;
+            card.player="player"+index;
+            gameStatus.players[index-1].cards.push(card);
+            gameStatus.players[index-1].pileColors.push(card.color);
+            gameStatus.players[index-1].pileSymbols.push(card.symbol);
+            deckCount--;
+        }
+        else
+        {
+            deck=gameStatus.playedPile;
+            shuffleDeck();
+            var card=deck.pop();
+            card.deck=false;
+            card.player="player"+index;
+            gameStatus.players[index-1].cards.push(card);
+            gameStatus.players[index-1].pileColors.push(card.color);
+            gameStatus.players[index-1].pileSymbols.push(card.symbol);
+            deckCount=deck.length;
+        }
+        hasPicked=false;
+        displayPlayerCards();
+    }
+}
 
+
+// function to check if user play is valid
+function playIsValid(card)
+{
+    if(card!=null&&card!=undefined)
+    {
+        if(card.color=="none")
+        return true;
+        else if(card.color==gameStatus.currentColor)
+        return true;
+        else if(card.symbol==gameStatus.currentSymbol)
+        return true;
+        else if(gameStatus.currentColor==null||gameStatus.currentSymbol==null)
+        return true;
+    }
+    return false;
+}
+
+
+// function to carry out the property of user played card
+function carryOutProperty(card)
+{
+    if(card.property=="number")
+    return
+    else
+    {
+        if(card.property=="reverse")
+        {
+            gameStatus.sequence=!gameStatus.sequence;
+        }
+        else if(card.property=="skip")
+        {
+            gameStatus.turn=nextTurn();
+        }
+        else if(card.property=="picktwo")
+        {
+            var victim=nextTurn();
+            addCardFromDeck(victim);
+            addCardFromDeck(victim);
+            gameStatus.turn=victim;
+        }
+        else if(card.property=="plus4")
+        {
+            var victim=nextTurn();
+            addCardFromDeck(victim);
+            addCardFromDeck(victim);
+            addCardFromDeck(victim);
+            addCardFromDeck(victim);
+            if(gameStatus.turn=="user")
+            colorPickFlag=true;
+            gameStatus.turn=victim;
+        }
+        else if(card.property=="colorpick"&&gameStatus.turn=="user")
+        {
+            colorPickFlag=true;
+        }
+    }
+}
 
 
 

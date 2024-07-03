@@ -1,3 +1,6 @@
+
+alert("currently in debugging mode! computer cards will be visible!");
+
 // global variables
 
 var cPage="home";

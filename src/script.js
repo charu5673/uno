@@ -44,7 +44,7 @@ document.addEventListener("dragstart",function(event){
 
 // event handler for deck
 deckDisplay.addEventListener("click",function(e){
-    addCardFromDeck("user");
+    addCardFromDeck("user",false);
 });
 
 
@@ -837,7 +837,7 @@ function updateInfoDisplays()
 
 
 // function to add card to user or player cards from deck
-function addCardFromDeck(player)
+function addCardFromDeck(player,flag)
 {
     if(player=="user"&&(!hasPicked))
     {
@@ -863,8 +863,8 @@ function addCardFromDeck(player)
         }
         hasPicked=true;
         displayUserCards();
-        if(!(userCards[userCards.length-1].color=="none"||userCards[userCards.length-1].color==gameStatus.currentColor||userCards[userCards.length-1].symbol==gameStatus.currentSymbol))
-        carryOutNextTurn();
+        if(!(flag||userCards[userCards.length-1].color=="none"||userCards[userCards.length-1].color==gameStatus.currentColor||userCards[userCards.length-1].symbol==gameStatus.currentSymbol))
+            carryOutNextTurn();
     }
     else if(player.substring(0,4)=="play")
     {
@@ -925,10 +925,9 @@ function carryOutProperty(card)
     {
         if(card.property=="reverse")
         {
+            gameStatus.sequence=!gameStatus.sequence;
             if(gameStatus.numberOfPlayers==2)
             gameStatus.turn=nextTurn();
-            else
-            gameStatus.sequence=!gameStatus.sequence;
         }
         else if(card.property=="skip")
         {
@@ -937,17 +936,17 @@ function carryOutProperty(card)
         else if(card.property=="picktwo")
         {
             var victim=nextTurn();
-            addCardFromDeck(victim);
-            addCardFromDeck(victim);
+            addCardFromDeck(victim,true);
+            addCardFromDeck(victim,true);
             gameStatus.turn=victim;
         }
         else if(card.property=="plus4")
         {
             var victim=nextTurn();
-            addCardFromDeck(victim);
-            addCardFromDeck(victim);
-            addCardFromDeck(victim);
-            addCardFromDeck(victim);
+            addCardFromDeck(victim,true);
+            addCardFromDeck(victim,true);
+            addCardFromDeck(victim,true);
+            addCardFromDeck(victim,true);
             if(currentPlayer=="user")
             colorPickFlag=true;
             gameStatus.turn=victim;
@@ -975,10 +974,20 @@ function chooseNextColor(c)
 // function to change turns
 function carryOutNextTurn()
 {
+    var allPlayers;
     hasPicked=false;
     gameStatus.turn=nextTurn();
     if(gameStatus.turn.substring(0,4)=="play")
     {
+        var cPlayerTurn=document.querySelector(".cplayer_text.c"+gameStatus.turn);
+        allPlayers=document.querySelectorAll(".cplayer_text");
+        allPlayers.forEach(function(i){
+            i.style.backgroundColor="#005C78";
+            i.firstChild.style.color="#F3F7EC";
+        });
+        cPlayerTurn.style.backgroundColor="#F3F7EC";
+        cPlayerTurn.firstChild.style.color="#005C78";
+        setTimeout(function(){
         var player=parseInt(gameStatus.turn.substring(6));
         var cardPicked=computerChoice(gameStatus.players[player-1].cards);
         if(cardPicked==null)
@@ -1031,10 +1040,14 @@ function carryOutNextTurn()
             displayPlayerCards();
         }
         currentCardDisplay.src="./assets/cards/"+gameStatus.currentCard.folder+gameStatus.currentCard.img;
+        allPlayers=document.querySelectorAll(".cplayer_text");
+        allPlayers.forEach(function(i){
+            i.style.backgroundColor="#005C78";
+            i.style.color="#F3F7EC";
+        });
         carryOutNextTurn();
-        return;
+        },2000);
     }
-    currentCardDisplay.src="./assets/cards/"+gameStatus.currentCard.folder+gameStatus.currentCard.img;
 }
 
 

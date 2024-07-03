@@ -269,19 +269,17 @@ input[type=number]
     color: #F3F7EC;
 }
 
-.cplayer div
-{
-    background-color: #005C78;
-}
-
 .cplayer_text
 {
     padding: 10px;
     border-radius: 10px;
+    background-color: #005C78;
+    color:#F3F7EC;
 }
 
 .cplayer_cards
 {
+    background-color: #005C78;
     display: grid;
     padding: 10px;
 }

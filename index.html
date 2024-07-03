@@ -19,8 +19,8 @@
     </div>
     <main>
         <div class="side">
-            <button class="start_reset" onclick="initialize()">Start</button>
-            <button class="arrange">Arrange</button>
+            <button class="start_reset">Start</button>
+            <button class="arrange" onclick="arrange()">Arrange</button>
             <button class="say_uno">UNO!</button>
             <div class="button4_side">
                 <label>Players:&nbsp</label>
@@ -31,15 +31,17 @@
         <div class="gameArea">
             <div class="game">
                 <div class="game_row1">
-                    <div class="played_cards">
-                        <div class="color_buttons_info">
-                            <button class="red_choice" hidden></button>
-                            <button class="yellow_choice current_color"></button>
-                            <button class="green_choice current_symbol"></button>
-                            <button class="blue_choice" hidden></button>
-                        </div>
-                        <img class="current_card">
+                    <div class="color_buttons">
+                        <button class="red_choice"></button>
+                        <button class="yellow_choice"></button>
+                        <button class="blue_choice"></button>
+                        <button class="green_choice"></button>
                     </div>
+                    <div class="current_status">
+                        <img src="./assets/images/display/display_empty.png" class="current_symbol">
+                        <img src="./assets/images/display/display_empty.png" class="current_color">
+                    </div>
+                    <img class="current_card" ondragover="allowDrop(event)" ondrop="onDropCurrentCard(event)" src="./assets/images/play_a_card.png">
                 </div>
                 <div class="game_row2">
                     <button class="play_card"><svg viewBox="0 -0.5 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="si-glyph si-glyph-triangle-right" fill="#000000" transform="matrix(-1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>1234</title> <defs> </defs> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <path d="M6.113,15.495 C5.531,16.076 4.01,16.395 4.01,14.494 L4.01,1.506 C4.01,-0.333 5.531,-0.076 6.113,0.506 L12.557,6.948 C13.137,7.529 13.137,8.47 12.557,9.052 L6.113,15.495 L6.113,15.495 Z" fill="#000000" class="si-glyph-fill"> </path> </g> </g></svg></button>
@@ -47,9 +49,12 @@
                 </div>
             </div>
             <div class="computer_players">
-                <div class="cplayer2">
-                    <div class="cplayer1_cards"></div>
-                    <div class="cplayer1_text"></div>
+                <div class="cplayer1 cplayer">
+                    <div class="cplayer1 cplayer_cards"></div>
+                    <div class="cplayer1 cplayer_text">
+                        <p class="cplayer_number">Player 1</p>
+                        <p class="player_text cplayer1"></p>
+                    </div>
                 </div>
             </div>
         </div>

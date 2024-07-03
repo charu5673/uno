@@ -113,7 +113,8 @@ input[type=number]
 
 .gameArea
 {
-    display: flex;
+    display: grid;
+    grid-template-columns: 5fr 4fr;
     margin: 30px;
     margin-left: 0;
     background-color: #F2CFC1;
@@ -182,3 +183,111 @@ input[type=number]
     align-self: flex-start;
 }
 
+.game_row1
+{
+    padding: 30px;
+    display: flex;
+    gap:40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.current_status img
+{
+    height: 8em;
+    width: 6em;
+}
+
+.current_card
+{
+    border-radius: 10px;
+    height: 12em;
+    width: 9em;
+}
+
+.color_buttons
+{
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+}
+
+.color_buttons button
+{
+    border: none;
+    height: 50px;
+    width: 100px;
+    border-radius: 25px;
+}
+
+.red_choice
+{
+    background-color: #EB5353;
+}
+
+.green_choice
+{
+    background-color: #36AE7C;
+}
+
+.yellow_choice
+{
+    background-color: #F9D923;
+}
+
+.blue_choice
+{
+    background-color: #187498;
+}
+
+.computer_players
+{
+    margin: 30px;
+    background-color: #E88D67;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 30px;
+    gap:20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.cplayer
+{
+    height: 150px;
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    gap:20px;
+}
+
+.cplayer_number
+{
+    font-family: fulbo-argenta;
+    color: #F3F7EC;
+}
+
+.cplayer div
+{
+    background-color: #005C78;
+}
+
+.cplayer_text
+{
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.cplayer_cards
+{
+    display: grid;
+    padding: 10px;
+}
+
+.cplayer_cards img
+{
+    height: 8em;
+    align-self: flex-end;
+}

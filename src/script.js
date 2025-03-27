@@ -1,5 +1,4 @@
 
-alert("currently in debugging mode! computer cards will be visible!");
 
 // global variables
 
@@ -678,6 +677,11 @@ function distributeCards()
 // function to initialize the game
 function initialize()
 {
+    if(playerCount.value>4||playerCount.value<2||playerCount.value==null||playerCount.value==undefined||playerCount.value=="")
+    {
+        alert("Enter a valid number of players! (Between 2 and 4)");
+        return;
+    }
     deckCount=108;
     gameStatus.turn="user";
     gameStatus.gameOngoing=true;

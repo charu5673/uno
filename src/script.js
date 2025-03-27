@@ -26,6 +26,11 @@ var lastDragged=null;
 var colorPickFlag=false;
 var colorChoiceButtons=document.querySelectorAll(".colorChoice");
 var currentPlayer;
+var infoArea=document.querySelector(".info_area");
+var sayUno=document.querySelector(".say_uno");
+var unoFlag=false;
+var haveToSayUno=false;
+var ib_count=0;
 
 
 //
@@ -121,6 +126,15 @@ startReset.addEventListener("click",function()
     initialize();
     else
     reset();
+});
+
+
+// event handler for saying uno
+sayUno.addEventListener("click",()=>{
+    if(!gameStatus.gameOngoing||!haveToSayUno)
+        return;
+    unoFlag=true;
+    updateInfoBox("UNO!");
 });
 
 
@@ -679,9 +693,10 @@ function initialize()
 {
     if(playerCount.value>4||playerCount.value<2||playerCount.value==null||playerCount.value==undefined||playerCount.value=="")
     {
-        alert("Enter a valid number of players! (Between 2 and 4)");
+        updateInfoBox("Enter a valid number of players! (Between 2 and 4)");
         return;
     }
+    updateInfoBox("Game Started!");
     deckCount=108;
     gameStatus.turn="user";
     gameStatus.gameOngoing=true;
@@ -697,6 +712,24 @@ function initialize()
         gameStatus.players[i].noOfCards=7;
     }
     distributeCards();
+}
+
+
+// function to update info box
+function updateInfoBox(s)
+{
+    ib_count++;
+    let c=ib_count;
+    let newInfoDiv=document.createElement("div");
+    newInfoDiv.className=`info_box ib${c}`;
+    newInfoDiv.innerHTML=s;
+    if(infoArea.children.length==0)
+    infoArea.appendChild(newInfoDiv);
+    else
+    infoArea.insertBefore(newInfoDiv,infoArea.firstChild);
+    setTimeout(()=>{
+        document.querySelector(`.info_box.ib${c}`).remove();
+    },2000);
 }
 
 
@@ -833,6 +866,20 @@ function userCardsRemove(card)
             if(index>-1)
             userSymbols.splice(index,1);
             userCards.splice(i,1);
+            if(userCards.length==1)
+            {
+                haveToSayUno=true;
+                setTimeout(()=>{
+                    if(!unoFlag)
+                    {
+                        updateInfoBox("You did not say UNO in time! Two cards are added!");
+                        addCardFromDeck("user",true);
+                        addCardFromDeck("user",true);
+                    }
+                    unoFlag=false;
+                    haveToSayUno=false;
+                },4000);
+            }
             break;
         }
     }
@@ -950,7 +997,7 @@ function carryOutProperty(card)
 {
     currentPlayer=gameStatus.turn;
     if(card.property=="number")
-    return
+    return;
     else
     {
         if(card.property=="reverse")
@@ -978,12 +1025,16 @@ function carryOutProperty(card)
             addCardFromDeck(victim,true);
             addCardFromDeck(victim,true);
             if(currentPlayer=="user")
-            colorPickFlag=true;
+            {
+                colorPickFlag=true;
+                updateInfoBox("Pick a color!");
+            }
             gameStatus.turn=victim;
         }
         else if(card.property=="colorpick"&&currentPlayer=="user")
         {
             colorPickFlag=true;
+            updateInfoBox("Pick a color!");
         }
         if(card.property=="plus4"||card.property=="colorpick"&&currentPlayer!="user")
         {
@@ -1044,6 +1095,7 @@ function carryOutNextTurn()
             cPlayerTurn.firstChild.style.color="#005C78";
             card.deck=false;
         }
+        updateInfoBox("Player "+player+"'s turn!");
         setTimeout(function(){
         if(gameStatus.turn=="user")
             gameStatus.turn=currentPlayer;
@@ -1076,6 +1128,8 @@ function carryOutNextTurn()
         carryOutNextTurn();
         },2000);
     }
+    else
+    updateInfoBox("Your turn!");
 }
 
 
@@ -1101,7 +1155,7 @@ function checkIfWon()
 // function to handle a player winning
 function playerWins(i)
 {
-    alert("Player "+(i+1)+" wins!");
+    updateInfoBox("Player "+(i+1)+" wins!");
     gameStatus.players.splice(i,1);
     var reqDiv=document.querySelector(".cplayer.cplayer"+(gameStatus.numberOfPlayers-1));
     reqDiv.remove();
@@ -1119,7 +1173,7 @@ function playerWins(i)
 // function to handle user winning
 function userWins()
 {
-    alert("You win!");
+    updateInfoBox("You win!");
     gameStatus.gameOngoing=false;
     gameStatus=resetGameStatus();
 }
@@ -1128,7 +1182,7 @@ function userWins()
 // function to handle user losing
 function userLoses()
 {
-    alert("You lose!");
+    updateInfoBox("You lose!");
     gameStatus.gameOngoing=false;
     gameStatus=resetGameStatus();
 }

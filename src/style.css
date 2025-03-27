@@ -289,3 +289,24 @@ input[type=number]
     height: 8em;
     align-self: flex-end;
 }
+
+.info_area
+{
+    margin-top: 50px;
+    margin-left: 110px;
+    position: absolute;
+    z-index: 5;
+}
+
+.info_box
+{
+    width: fit-content;
+    font-family: fulbo-argenta;
+    color: #005C78;
+    background-color: #F3F7EC;
+    border-radius: 10px;
+    font-size: 1.9em;
+    padding: 10px;
+    box-shadow: 0 0 10px #000000c9;
+    margin-bottom: 20px;
+}

@@ -1,5 +1,4 @@
 
-
 // global variables
 
 var cPage="home";
